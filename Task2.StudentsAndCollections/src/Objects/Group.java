@@ -1,14 +1,9 @@
 package Objects;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Group {
-
-    private final int minAge = 16;
-    private final int maxAge = 30;
-    private final int minLengthString = 5;
-    private final String lexicon = "abcdefghijklmnopqrstuvwxyz";
-    final Random rand = new Random();
     private List<Student> students;
 
     public Group(int countOfStudents) {
@@ -18,69 +13,39 @@ public class Group {
     private void createGroup(int countOfStudents) {
         students = new ArrayList<>();
         while (countOfStudents > 0) {
-            students.add(new Student(
-                    createName(minLengthString, minLengthString * 2, lexicon),
-                    createName(minLengthString, minLengthString * 3, lexicon),
-                    createAge(minAge, maxAge)));
+            students.add(new Student());
             countOfStudents--;
         }
-    }
-
-    private String createName(int min, int max, String letters) {
-        StringBuilder builder = new StringBuilder();
-        while (builder.toString().length() == 0) {
-            int length = rand.nextInt((max - min) + 1) + min;
-            for (int i = 0; i < length; i++) {
-                builder.append(letters.charAt(rand.nextInt(letters.length())));
-            }
-        }
-        return builder.toString().substring(0, 1).toUpperCase() + builder.toString().substring(1);
-    }
-
-    private int createAge(int min, int max) {
-        return rand.nextInt((max - min) + 1) + min;
+        students.stream().forEach(student -> System.out.println(String.format("ID: %s Student: %s %s Age: %s", student.getId(), student.getFirstName(), student.getLastName(), student.getAge())));
     }
 
     public void sortByParameter(Comparator<Student> studentComparator) {
-        Collections.sort(students, studentComparator);
+        students.stream().sorted(studentComparator);
     }
 
-    public List<Student> getStudetByFirstLetterInLastName(Character firstLetter) {
-        List<Student> tempArray = new ArrayList<>();
-        for (Student student : students) {
-            if (student.getLastName().substring(0, 1).toUpperCase().equals(firstLetter.toString().toUpperCase())) {
-                tempArray.add(student);
-            }
-        }
-        return tempArray;
+    public List<Student> getStudentsByFirstLetterInLastName(Character firstLetter) {
+        return students.stream()
+                .filter(student -> student.getLastName().substring(0, 1).toUpperCase().equals(firstLetter.toString().toUpperCase()))
+                .collect(Collectors.toList());
     }
 
     public double getAverageOfAge() {
-        double average = 0.0;
-        for (Student student : students) {
-            average += student.getAge();
-        }
-        return average / students.size();
+        return students.stream()
+                .collect(Collectors.averagingDouble(student -> student.getAge()));
     }
 
     public HashMap<Integer, Student> getStudentsMaps() {
         HashMap<Integer, Student> studentsMap = new HashMap<Integer, Student>();
-        for (Student student : students) {
-            studentsMap.put(student.getId(), student);
-        }
+        students.stream()
+                .forEach(student -> studentsMap.put(student.getId(), student));
         return studentsMap;
     }
 
     public HashMap<Integer, Student> getStudentsWithIdMoreValue(int minId) {
-        HashMap<Integer, Student> studentsMap = (HashMap<Integer, Student>) getStudentsMaps().clone();
-
-        Iterator iterator = studentsMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry) iterator.next();
-            if ((Integer) pair.getKey() < minId) {
-                iterator.remove();
-            }
-        }
+        HashMap<Integer, Student> studentsMap = new HashMap<Integer, Student>();
+        students.stream()
+                .filter(student -> student.getId() >= minId)
+                .forEach(student -> studentsMap.put(student.getId(), student));
         return studentsMap;
     }
 }

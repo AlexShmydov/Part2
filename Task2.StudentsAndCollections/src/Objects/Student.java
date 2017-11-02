@@ -2,15 +2,26 @@ package Objects;
 
 import java.util.Comparator;
 
-public class Student extends BaseStudent{
+public class Student extends BaseStudent {
     private String firstName;
     private String lastName;
     private int age;
 
-    public Student(String firstName, String lastName, int age){
+    private final int minAge = 16;
+    private final int maxAge = 30;
+    private final int minLengthString = 5;
+    private final String lexicon = "abcdefghijklmnopqrstuvwxyz";
+
+    public Student(String firstName, String lastName, int age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
+    }
+
+    public Student(){
+        setAge(StudentFactory.createAge(minAge, maxAge));
+        setFirstName(StudentFactory.createName(minLengthString, minLengthString * 2, lexicon));
+        setLastName(StudentFactory.createName(minLengthString, minLengthString * 3, lexicon));
     }
 
     public int getAge() {

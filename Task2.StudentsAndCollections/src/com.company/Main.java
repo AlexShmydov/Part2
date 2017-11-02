@@ -15,7 +15,7 @@ public class Main {
         Group group = new Group(DEFAULT_VALUE_OF_STUDENTS);
         group.sortByParameter(DEFAULT_PARAMETER);
         group.getAverageOfAge();
-        group.getStudetByFirstLetterInLastName(FIRST_LETTER);
+        group.getStudentsByFirstLetterInLastName(FIRST_LETTER);
         group.getStudentsMaps();
         group.getStudentsWithIdMoreValue(MIN_ID);
     }
