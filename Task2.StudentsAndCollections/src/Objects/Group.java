@@ -34,7 +34,7 @@ public class Group {
                 builder.append(letters.charAt(rand.nextInt(letters.length())));
             }
         }
-        return builder.toString().substring(0, 1) + builder.toString().substring(1);
+        return builder.toString().substring(0, 1).toUpperCase() + builder.toString().substring(1);
     }
 
     private int createAge(int min, int max) {
